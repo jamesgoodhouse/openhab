@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo STARTING DBUS DAEMON
+exec /usr/bin/dbus-daemon --system --nofork --nopidfile --nosyslog

@@ -1,0 +1,19 @@
+#!/usr/bin/with-contenv bash
+
+echo RUNNING OPENHAB ENTRYPOINT FOR INITIAL SETUP
+/entrypoint.sh
+
+echo ADDING OPENHAB USER TO BLUETOOH GROUP
+adduser openhab bluetooth
+
+# add missing native libs (https://github.com/openhab/openhab-addons/issues/5680)
+# TODO: make platform agnostic, currently tied to arm6 aarch32
+echo ADDING BLUETOOTH NATIVE LIBRARIES
+wget https://github.com/openhab/openhab-addons/raw/2.5.x/bundles/org.openhab.binding.bluetooth.bluez/src/main/resources/lib/armv6hf/libtinyb.so \
+     -O /usr/lib/jvm/default-jvm/jre/lib/aarch32/libtinyb.so && \
+     chown 111:122 /usr/lib/jvm/default-jvm/jre/lib/aarch32/libtinyb.so && \
+     chmod 755 /usr/lib/jvm/default-jvm/jre/lib/aarch32/libtinyb.so && \
+wget https://github.com/openhab/openhab-addons/raw/2.5.x/bundles/org.openhab.binding.bluetooth.bluez/src/main/resources/lib/armv6hf/libjavatinyb.so \
+     -O /usr/lib/jvm/default-jvm/jre/lib/aarch32/libjavatinyb.so && \
+     chown 111:122 /usr/lib/jvm/default-jvm/jre/lib/aarch32/libjavatinyb.so && \
+     chmod 755 /usr/lib/jvm/default-jvm/jre/lib/aarch32/libjavatinyb.so
